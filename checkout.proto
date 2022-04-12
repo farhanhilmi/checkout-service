@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+service CheckoutService {
+  rpc checkout (orderId) returns (Status) {}
+}
+
+message orderId {
+  string orderId = 1;
+}
+
+message Status {
+  string status = 1;
+}
