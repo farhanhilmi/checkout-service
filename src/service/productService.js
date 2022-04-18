@@ -1,8 +1,8 @@
 import client from '../grpc/product.js';
 
-const verifyItemAvailability = (listProductQty) => {
+const verifyItemAvailability = (productsId) => {
   return new Promise((resolve, reject) => {
-    client.isProductsAvailable({ listProductQty }, (error, response) => {
+    client.isProductsAvailable({ productsId }, (error, response) => {
       if (error) reject(error);
       resolve(response);
     });

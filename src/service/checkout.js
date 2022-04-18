@@ -6,15 +6,13 @@ export default async (call, callback) => {
     const { orderId } = call.request;
     const order = await validateOrderId(orderId);
 
-    const products = order.products.map((prod) => {
-      return { _id: prod.productId, quantity: prod.qty };
+    const productsId = order.products.map((prod) => {
+      return prod.productId;
     });
 
-    const isAvailable = await verifyItemAvailability(products);
-    console.log('isAvailable', isAvailable);
+    const status = await verifyItemAvailability(productsId);
 
-    callback(null, isAvailable);
-    // const isItemAvailable = await verifyItemAvailability(order.products.product)
+    callback(null, { status });
   } catch (error) {
     callback(error);
   }
