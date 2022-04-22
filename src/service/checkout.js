@@ -1,5 +1,6 @@
 import validateOrderId from './orderService.js';
 import verifyItemAvailability from './productService.js';
+import esClient from '../database/elasticsearch/client.js';
 
 export default async (call, callback) => {
   try {
@@ -11,6 +12,18 @@ export default async (call, callback) => {
     });
 
     const status = await verifyItemAvailability(productsId);
+
+    const transaction = {
+      userId: order.userId,
+      orderId: order._id,
+      totalAmount: order.total,
+      createdDate: new Date(),
+    };
+
+    esClient.index({
+      index: 'transactions',
+      body: transaction,
+    });
 
     callback(null, { status });
   } catch (error) {

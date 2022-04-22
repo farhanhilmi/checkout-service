@@ -4,7 +4,6 @@ service ProductService {
   rpc getProduct (productId) returns (Product) {}
   rpc getAllProduct (Empty) returns (ListProduct) {}
   rpc addProduct (AddProduct) returns (Product) {}
-  rpc checkProductQty (productsId) returns (productQty) {}
   rpc isProductsAvailable (productsId) returns (status) {}
   rpc checkAndUpdateProductQty (listCheckAndUpdateQty) returns (listProductQty) {}
 }
