@@ -4,6 +4,8 @@ import protoLoader from '@grpc/proto-loader';
 import checkout from './service/checkout.js';
 import getAllTransactions from './service/getAllTransactions.js';
 
+import config from './config/index.js';
+
 // import config from './config/index.js';
 
 const options = {
@@ -26,7 +28,7 @@ server.addService(checkoutPackage.CheckoutService.service, {
 });
 
 server.bindAsync(
-  '127.0.0.1:6001',
+  config.app.port,
   grpc.ServerCredentials.createInsecure(),
   (error, port) => {
     if (error) console.log('Error: ', error);

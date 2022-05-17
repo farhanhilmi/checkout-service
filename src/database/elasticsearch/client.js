@@ -1,7 +1,9 @@
 import es from 'elasticsearch';
 
+import config from '../../config/index.js';
+
 const esClient = new es.Client({
-  host: 'localhost:9200',
+  host: config.elasticSearch.port,
   // log: trace,
 });
 
