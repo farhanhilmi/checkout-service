@@ -2,16 +2,14 @@ import validateOrderId from './orderService.js';
 import verifyItemAvailability from './productService.js';
 import esClient from '../database/elasticsearch/client.js';
 
-export default async (call, callback) => {
+export default async (orderId) => {
   try {
-    const { orderId } = call.request;
     const order = await validateOrderId(orderId);
-
     const productsId = order.products.map((prod) => {
       return prod.productId;
     });
 
-    const status = await verifyItemAvailability(productsId);
+    await verifyItemAvailability(productsId);
 
     const transaction = {
       userId: order.userId,
@@ -20,13 +18,29 @@ export default async (call, callback) => {
       createdDate: new Date(),
     };
 
+    const exist = await esClient.search({
+      index: 'transactions',
+      query: {
+        bool: {
+          must: {
+            match: {
+              orderId: order._id,
+            },
+          },
+        },
+      },
+    });
+    if (exist.hits.hits.length > 1) {
+      throw new Error('You have made a transaction!');
+    }
+
     esClient.index({
       index: 'transactions',
-      body: transaction,
+      document: transaction,
     });
 
-    callback(null, { status });
+    return 'transaction success';
   } catch (error) {
-    callback(error);
+    return error;
   }
 };

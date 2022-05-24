@@ -1,9 +1,12 @@
-import es from 'elasticsearch';
+import { Client } from '@elastic/elasticsearch';
 
 import config from '../../config/index.js';
 
-const esClient = new es.Client({
-  host: config.elasticSearch.port,
+const esClient = new Client({
+  node: {
+    url: new URL(`http://${config.elasticSearch.port}`),
+  },
+  // host: config.elasticSearch.port,
   // log: trace,
 });
 

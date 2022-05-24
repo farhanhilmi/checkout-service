@@ -1,7 +1,7 @@
 import grpc from '@grpc/grpc-js';
 import protoLoader from '@grpc/proto-loader';
 
-import checkout from './service/checkout.js';
+import checkoutHandler from './handler/checkoutHandler.js';
 import getAllTransactions from './service/getAllTransactions.js';
 
 import config from './config/index.js';
@@ -23,7 +23,7 @@ const checkoutPackage = grpc.loadPackageDefinition(packageDef);
 
 const server = new grpc.Server();
 server.addService(checkoutPackage.CheckoutService.service, {
-  checkout,
+  checkout: checkoutHandler.checkout,
   getAllTransactions,
 });
 
@@ -32,7 +32,7 @@ server.bindAsync(
   grpc.ServerCredentials.createInsecure(),
   (error, port) => {
     if (error) console.log('Error: ', error);
-    console.log(`Server running at http://127.0.0.1:${port}`);
     server.start();
+    console.log(`Server running at ${config.app.port}`);
   },
 );

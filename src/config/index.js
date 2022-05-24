@@ -7,7 +7,7 @@ const { HOST, SERVER_PORT, PRODUCT_GRPC_PORT, ORDER_GRPC_PORT, ES_PORT } =
 
 const config = {
   app: {
-    port: `${HOST}:${SERVER_PORT}` | 6001,
+    port: `${HOST}:${SERVER_PORT}`,
   },
   grpc: {
     port: {
